@@ -5,8 +5,13 @@ const erc20abi  = require('./erc20abi.json');
 
 // config
 const nodeAddress       = 'http://localhost:8545';
-const erc20TokenAddress = '0xa74476443119A942dE498590Fe1f2454d7D4aC0d';
-const userAddress       = '0xfbb1b73c4f0bda4f67dca266ce6ef42f520fbb98';
+// MKTcoin
+const erc20TokenAddress = '0x5ea300d1ccd2297b751ad9599c25fa45626f1a7d';
+const userAddress       = '0x3110c4d7a26748cdcb9e2055fa907605118c5b8d';
+// GOLEM token
+// const erc20TokenAddress = '0xa74476443119A942dE498590Fe1f2454d7D4aC0d';
+// const userAddress       = '0xfbb1b73c4f0bda4f67dca266ce6ef42f520fbb98';
+
 
 // https://etherscan.io/address/0xa74476443119A942dE498590Fe1f2454d7D4aC0d
 // https://etherscan.io/address/0xfbb1b73c4f0bda4f67dca266ce6ef42f520fbb98
@@ -46,7 +51,7 @@ async function callERC20() {
 
   // get incoming transactions
   const transferEventObj = erc20Obj.Transfer({ to: userAddress }, { fromBlock: blockNumber - 250 });
-  global.console.log('Last incoming transactions in the last 250 blocks and start to watch for new transactions');
+  global.console.log('Print incoming transactions in the last 250 blocks and start to watch for new transactions');
   transferEventObj.watch((error, eventRecord) => {
     global.console.log(
       `\tFrom: ${eventRecord.args.from}, To: ${eventRecord.args.to}, Value: ${eventRecord.args.value.toNumber() /
