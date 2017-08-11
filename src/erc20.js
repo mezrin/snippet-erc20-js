@@ -1,4 +1,4 @@
-const Promise     = require('bluebird');
+const Promise   = require('bluebird');
 const Web3Class = require('web3');
 const erc20abi  = require('./erc20abi.json');
 
@@ -50,8 +50,17 @@ async function callERC20() {
   const blockNumber = web3Obj.eth.blockNumber;
 
   // get incoming transactions
-  const transferEventObj = erc20Obj.Transfer({ to: userAddress }, { fromBlock: blockNumber - 250 });
-  global.console.log('Print incoming transactions in the last 250 blocks and start to watch for new transactions');
+
+  global.console.log('Print incoming transactions in the last 250 blocks');
+  let transferEventObj  = erc20Obj.Transfer({ to: userAddress }, { fromBlock: blockNumber - 250 });
+  const getTransferEvents = Promise.promisify(transferEventObj.get).bind(transferEventObj);
+  const pastEvents        = await getTransferEvents();
+  pastEvents.forEach((eventRecord) => global.console.log(
+    `\tFrom: ${eventRecord.args.from}, To: ${eventRecord.args.to}, Value: ${eventRecord.args.value.toNumber() /
+                                                                            (10 ** tokenDecimalsNumber)}`));
+
+  global.console.log('Start to watch for new transactions');
+  transferEventObj = erc20Obj.Transfer({ to: userAddress }, { fromBlock: blockNumber });
   transferEventObj.watch((error, eventRecord) => {
     global.console.log(
       `\tFrom: ${eventRecord.args.from}, To: ${eventRecord.args.to}, Value: ${eventRecord.args.value.toNumber() /
