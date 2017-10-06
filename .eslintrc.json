@@ -47,8 +47,9 @@
     ],
     "key-spacing": [
       "error",
-       {"align": "value"}
+       {"mode": "strict"}
     ],
+    "object-curly-spacing": ["error", "never"],
     "max-len": "off",
     "newline-per-chained-call": "off",
     "no-console": "warn",
